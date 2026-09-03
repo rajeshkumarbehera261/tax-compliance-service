@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>TaxGuard | Rules</title>
+
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+
+<div class="app-wrapper">
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div>
+                <h4>Tax<span>Guard</span></h4>
+                <small>Compliance Platform</small>
+            </div>
+
+        </div>
+
+        <div class="sidebar-section">MAIN</div>
+
+        <nav>
+
+            <a href="/dashboard" class="nav-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                Dashboard
+            </a>
+
+            <a href="/transactions" class="nav-item">
+                <i class="bi bi-arrow-left-right"></i>
+                Transactions
+            </a>
+
+            <a href="/exceptions" class="nav-item">
+                <i class="bi bi-exclamation-triangle"></i>
+                Exceptions
+            </a>
+
+            <div class="sidebar-section">ANALYTICS</div>
+
+            <a href="/reports" class="nav-item">
+                <i class="bi bi-bar-chart-line"></i>
+                Reports
+            </a>
+
+            <div class="sidebar-section">MANAGEMENT</div>
+
+            <a href="/rules" class="nav-item active">
+                <i class="bi bi-sliders"></i>
+                Compliance Rules
+            </a>
+
+            <a href="/audit-logs" class="nav-item">
+                <i class="bi bi-clock-history"></i>
+                Audit Logs
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System Operational</strong>
+                    <small>All services running</small>
+                </div>
+
+            </div>
+
+            <button class="logout-sidebar" onclick="logout()">
+                <i class="bi bi-box-arrow-left"></i>
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <button class="mobile-menu" onclick="toggleSidebar()">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <div>
+
+                <h5>Compliance Rules</h5>
+
+                <span class="topbar-subtitle">
+                    Configure automated tax validation rules
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <div class="page-content">
+
+            <div class="page-title-row">
+
+                <div>
+
+                    <span class="page-eyebrow">
+                        RULE ENGINE
+                    </span>
+
+                    <h2>Compliance Rules</h2>
+
+                    <p>
+                        Rules are evaluated automatically for every valid transaction.
+                    </p>
+
+                </div>
+
+                <button
+                        class="btn primary-btn"
+                        data-bs-toggle="modal"
+                        data-bs-target="#ruleModal">
+
+                    <i class="bi bi-plus-lg"></i>
+                    Create Rule
+
+                </button>
+
+            </div>
+
+
+            <div class="rule-info-banner">
+
+                <div class="rule-info-icon">
+                    <i class="bi bi-lightbulb"></i>
+                </div>
+
+                <div>
+
+                    <strong>
+                        How the Rule Engine works
+                    </strong>
+
+                    <p>
+                        Every valid transaction passes through all enabled
+                        compliance rules. Any violation creates a business
+                        exception for auditor review.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                    id="rulesContainer"
+                    class="row g-4 mt-1">
+
+                <div class="col-xl-4">
+
+                    <div class="rule-card">
+
+                        <div class="rule-card-top">
+
+                            <div class="rule-icon red">
+                                <i class="bi bi-cash-stack"></i>
+                            </div>
+
+                            <span class="rule-status enabled">
+                                ENABLED
+                            </span>
+
+                        </div>
+
+                        <h5>
+                            High Value Transaction
+                        </h5>
+
+                        <p>
+                            Detects transactions exceeding the configured
+                            financial threshold.
+                        </p>
+
+                        <div class="rule-meta">
+
+                            <span>
+                                <i class="bi bi-tag"></i>
+                                HIGH_VALUE_TRANSACTION
+                            </span>
+
+                            <span>
+                                <i class="bi bi-flag"></i>
+                                HIGH
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-xl-4">
+
+                    <div class="rule-card">
+
+                        <div class="rule-card-top">
+
+                            <div class="rule-icon purple">
+                                <i class="bi bi-arrow-return-left"></i>
+                            </div>
+
+                            <span class="rule-status enabled">
+                                ENABLED
+                            </span>
+
+                        </div>
+
+                        <h5>
+                            Refund Validation
+                        </h5>
+
+                        <p>
+                            Ensures refund amounts do not exceed
+                            the original sale.
+                        </p>
+
+                        <div class="rule-meta">
+
+                            <span>
+                                <i class="bi bi-tag"></i>
+                                REFUND_VALIDATION
+                            </span>
+
+                            <span>
+                                <i class="bi bi-flag"></i>
+                                HIGH
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-xl-4">
+
+                    <div class="rule-card">
+
+                        <div class="rule-card-top">
+
+                            <div class="rule-icon orange">
+                                <i class="bi bi-percent"></i>
+                            </div>
+
+                            <span class="rule-status enabled">
+                                ENABLED
+                            </span>
+
+                        </div>
+
+                        <h5>
+                            GST Slab Violation
+                        </h5>
+
+                        <p>
+                            Detects transactions using a lower tax rate
+                            than their applicable GST slab.
+                        </p>
+
+                        <div class="rule-meta">
+
+                            <span>
+                                <i class="bi bi-tag"></i>
+                                GST_SLAB_VIOLATION
+                            </span>
+
+                            <span>
+                                <i class="bi bi-flag"></i>
+                                MEDIUM
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- RULE MODAL -->
+
+<div
+        class="modal fade"
+        id="ruleModal"
+        tabindex="-1">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content modern-modal">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span class="page-eyebrow">
+                        RULE ENGINE
+                    </span>
+
+                    <h5 class="modal-title">
+                        Create Compliance Rule
+                    </h5>
+
+                </div>
+
+                <button
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form id="ruleForm">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <label>Rule Name</label>
+
+                            <input
+                                    id="ruleName"
+                                    class="form-control"
+                                    required>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label>Rule Type</label>
+
+                            <select
+                                    id="ruleType"
+                                    class="form-select"
+                                    required>
+
+                                <option value="">
+                                    Select rule type
+                                </option>
+
+                                <option value="HIGH_VALUE_TRANSACTION">
+                                    HIGH_VALUE_TRANSACTION
+                                </option>
+
+                                <option value="REFUND_VALIDATION">
+                                    REFUND_VALIDATION
+                                </option>
+
+                                <option value="GST_SLAB_VIOLATION">
+                                    GST_SLAB_VIOLATION
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label>Severity</label>
+
+                            <select
+                                    id="ruleSeverity"
+                                    class="form-select">
+
+                                <option value="HIGH">HIGH</option>
+                                <option value="MEDIUM">MEDIUM</option>
+                                <option value="LOW">LOW</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label>Enabled</label>
+
+                            <select
+                                    id="ruleEnabled"
+                                    class="form-select">
+
+                                <option value="true">Enabled</option>
+                                <option value="false">Disabled</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-12">
+
+                            <label>Configuration JSON</label>
+
+                            <textarea
+                                    id="ruleConfig"
+                                    class="form-control"
+                                    rows="5"
+                                    placeholder='{"threshold": 100000}'></textarea>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                        class="btn btn-light"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button
+                        class="btn primary-btn"
+                        onclick="createRule()">
+
+                    Create Rule
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<script th:src="@{/js/app.js}"></script>
+
+<script>
+    document.addEventListener(
+        "DOMContentLoaded",
+        loadRules
+    );
+</script>
+
+</body>
+</html>

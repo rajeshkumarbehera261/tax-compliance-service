@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>TaxGuard | Audit Logs</title>
+
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+
+<div class="app-wrapper">
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div>
+                <h4>Tax<span>Guard</span></h4>
+                <small>Compliance Platform</small>
+            </div>
+
+        </div>
+
+        <div class="sidebar-section">MAIN</div>
+
+        <nav>
+
+            <a href="/dashboard" class="nav-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                Dashboard
+            </a>
+
+            <a href="/transactions" class="nav-item">
+                <i class="bi bi-arrow-left-right"></i>
+                Transactions
+            </a>
+
+            <a href="/exceptions" class="nav-item">
+                <i class="bi bi-exclamation-triangle"></i>
+                Exceptions
+            </a>
+
+            <div class="sidebar-section">ANALYTICS</div>
+
+            <a href="/reports" class="nav-item">
+                <i class="bi bi-bar-chart-line"></i>
+                Reports
+            </a>
+
+            <div class="sidebar-section">MANAGEMENT</div>
+
+            <a href="/rules" class="nav-item">
+                <i class="bi bi-sliders"></i>
+                Compliance Rules
+            </a>
+
+            <a href="/audit-logs" class="nav-item active">
+                <i class="bi bi-clock-history"></i>
+                Audit Logs
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System Operational</strong>
+                    <small>All services running</small>
+                </div>
+
+            </div>
+
+            <button class="logout-sidebar" onclick="logout()">
+                <i class="bi bi-box-arrow-left"></i>
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <button class="mobile-menu" onclick="toggleSidebar()">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <div>
+
+                <h5>Audit Logs</h5>
+
+                <span class="topbar-subtitle">
+                    Complete system activity history
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <div class="page-content">
+
+            <div class="page-title-row">
+
+                <div>
+
+                    <span class="page-eyebrow">
+                        SYSTEM AUDIT
+                    </span>
+
+                    <h2>Audit Logs</h2>
+
+                    <p>
+                        Track every important event in the compliance pipeline.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="audit-flow">
+
+                <div class="audit-step">
+
+                    <div class="audit-flow-icon blue">
+                        <i class="bi bi-cloud-arrow-up"></i>
+                    </div>
+
+                    <div>
+                        <strong>INGESTION</strong>
+                        <span>Transaction received</span>
+                    </div>
+
+                </div>
+
+                <div class="audit-arrow">
+                    <i class="bi bi-arrow-right"></i>
+                </div>
+
+                <div class="audit-step">
+
+                    <div class="audit-flow-icon purple">
+                        <i class="bi bi-calculator"></i>
+                    </div>
+
+                    <div>
+                        <strong>COMPUTATION</strong>
+                        <span>Tax calculated</span>
+                    </div>
+
+                </div>
+
+                <div class="audit-arrow">
+                    <i class="bi bi-arrow-right"></i>
+                </div>
+
+                <div class="audit-step">
+
+                    <div class="audit-flow-icon orange">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+
+                    <div>
+                        <strong>RULE ENGINE</strong>
+                        <span>Compliance evaluated</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="filter-card mt-4">
+
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+
+                        <label>Transaction ID</label>
+
+                        <input
+                                id="auditTransaction"
+                                class="form-control"
+                                placeholder="TXN-001">
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label>Event Type</label>
+
+                        <select
+                                id="auditEvent"
+                                class="form-select">
+
+                            <option value="">All Events</option>
+                            <option value="INGESTION">INGESTION</option>
+                            <option value="TAX_COMPUTATION">
+                                TAX_COMPUTATION
+                            </option>
+                            <option value="RULE_EXECUTION">
+                                RULE_EXECUTION
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-4 d-flex align-items-end">
+
+                        <button
+                                class="btn filter-btn w-100"
+                                onclick="loadAuditLogs()">
+
+                            <i class="bi bi-funnel"></i>
+                            Filter Logs
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-card mt-4">
+
+                <div class="card-header-custom">
+
+                    <div>
+
+                        <h5>Activity Timeline</h5>
+
+                        <p>
+                            Immutable system activity records
+                        </p>
+
+                    </div>
+
+                    <span class="audit-security">
+
+                        <i class="bi bi-lock-fill"></i>
+                        AUDIT PROTECTED
+
+                    </span>
+
+                </div>
+
+
+                <div class="table-responsive">
+
+                    <table class="table custom-table">
+
+                        <thead>
+
+                        <tr>
+
+                            <th>Timestamp</th>
+                            <th>Event</th>
+                            <th>Transaction</th>
+                            <th>Details</th>
+
+                        </tr>
+
+                        </thead>
+
+                        <tbody id="auditTableBody">
+
+                        <tr>
+
+                            <td colspan="4"
+                                class="text-center py-5">
+
+                                Loading audit logs...
+
+                            </td>
+
+                        </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script th:src="@{/js/app.js}"></script>
+
+<script>
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+            initializeUser();
+            loadAuditLogs();
+        }
+    );
+</script>
+
+</body>
+</html>

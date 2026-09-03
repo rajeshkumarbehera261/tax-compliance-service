@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>TaxGuard | Transactions</title>
+
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+
+<div class="app-wrapper">
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div>
+                <h4>Tax<span>Guard</span></h4>
+                <small>Compliance Platform</small>
+            </div>
+
+        </div>
+
+        <div class="sidebar-section">MAIN</div>
+
+        <nav>
+
+            <a href="/dashboard" class="nav-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                Dashboard
+            </a>
+
+            <a href="/transactions" class="nav-item active">
+                <i class="bi bi-arrow-left-right"></i>
+                Transactions
+            </a>
+
+            <a href="/exceptions" class="nav-item">
+                <i class="bi bi-exclamation-triangle"></i>
+                Exceptions
+            </a>
+
+            <div class="sidebar-section">ANALYTICS</div>
+
+            <a href="/reports" class="nav-item">
+                <i class="bi bi-bar-chart-line"></i>
+                Reports
+            </a>
+
+            <div class="sidebar-section">MANAGEMENT</div>
+
+            <a href="/rules" class="nav-item">
+                <i class="bi bi-sliders"></i>
+                Compliance Rules
+            </a>
+
+            <a href="/audit-logs" class="nav-item">
+                <i class="bi bi-clock-history"></i>
+                Audit Logs
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System Operational</strong>
+                    <small>All services running</small>
+                </div>
+            </div>
+
+            <button class="logout-sidebar" onclick="logout()">
+                <i class="bi bi-box-arrow-left"></i>
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <button class="mobile-menu" onclick="toggleSidebar()">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <div>
+                <h5>Transactions</h5>
+                <span class="topbar-subtitle">
+                    Monitor and validate financial transactions
+                </span>
+            </div>
+
+            <div class="topbar-right">
+
+                <div class="user-profile">
+
+                    <div class="avatar">
+                        <span id="userInitial">A</span>
+                    </div>
+
+                    <div class="user-info">
+                        <strong id="currentUsername">User</strong>
+                        <small id="currentRole">AUDITOR</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <div class="page-content">
+
+            <div class="page-title-row">
+
+                <div>
+                    <span class="page-eyebrow">
+                        FINANCIAL DATA
+                    </span>
+
+                    <h2>Transactions</h2>
+
+                    <p>
+                        Review tax calculations and compliance status.
+                    </p>
+                </div>
+
+                <button
+                        class="btn primary-btn"
+                        data-bs-toggle="modal"
+                        data-bs-target="#transactionModal">
+
+                    <i class="bi bi-plus-lg"></i>
+                    New Transaction
+
+                </button>
+
+            </div>
+
+
+            <div class="filter-card">
+
+                <div class="row g-3">
+
+                    <div class="col-lg-4">
+
+                        <label>Search</label>
+
+                        <div class="search-box">
+
+                            <i class="bi bi-search"></i>
+
+                            <input
+                                    id="transactionSearch"
+                                    type="text"
+                                    placeholder="Transaction ID or customer...">
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-2">
+
+                        <label>Status</label>
+
+                        <select
+                                id="statusFilter"
+                                class="form-select">
+
+                            <option value="">All Status</option>
+                            <option value="COMPLIANT">Compliant</option>
+                            <option value="UNDERPAID">Underpaid</option>
+                            <option value="OVERPAID">Overpaid</option>
+                            <option value="NON_COMPLIANT">Non-Compliant</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-lg-2">
+
+                        <label>Type</label>
+
+                        <select
+                                id="typeFilter"
+                                class="form-select">
+
+                            <option value="">All Types</option>
+                            <option value="SALE">Sale</option>
+                            <option value="REFUND">Refund</option>
+                            <option value="EXPENSE">Expense</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-lg-2">
+
+                        <label>Validation</label>
+
+                        <select
+                                id="validationFilter"
+                                class="form-select">
+
+                            <option value="">All</option>
+                            <option value="VALID">Valid</option>
+                            <option value="INVALID">Invalid</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-lg-2 d-flex align-items-end">
+
+                        <button
+                                class="btn filter-btn w-100"
+                                onclick="loadTransactions()">
+
+                            <i class="bi bi-funnel"></i>
+                            Apply
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-card mt-4">
+
+                <div class="card-header-custom">
+
+                    <div>
+
+                        <h5>Transaction Registry</h5>
+
+                        <p>
+                            Complete transaction records
+                        </p>
+
+                    </div>
+
+                    <span
+                            class="record-count"
+                            id="transactionCount">
+                        0 records
+                    </span>
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="table custom-table">
+
+                        <thead>
+
+                        <tr>
+
+                            <th>Transaction</th>
+                            <th>Customer</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Expected Tax</th>
+                            <th>Tax Gap</th>
+                            <th>Status</th>
+                            <th></th>
+
+                        </tr>
+
+                        </thead>
+
+                        <tbody id="transactionTableBody">
+
+                        <tr>
+                            <td colspan="8"
+                                class="text-center py-5">
+                                Loading transactions...
+                            </td>
+                        </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- NEW TRANSACTION MODAL -->
+
+<div
+        class="modal fade"
+        id="transactionModal"
+        tabindex="-1">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content modern-modal">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span class="page-eyebrow">
+                        TRANSACTION INGESTION
+                    </span>
+
+                    <h5 class="modal-title">
+                        Create Transaction
+                    </h5>
+
+                </div>
+
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form id="transactionForm">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <label>Transaction ID</label>
+
+                            <input
+                                    id="transactionId"
+                                    class="form-control"
+                                    required>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label>Transaction Date</label>
+
+                            <input
+                                    id="transactionDate"
+                                    type="date"
+                                    class="form-control"
+                                    required>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label>Customer ID</label>
+
+                            <input
+                                    id="customerId"
+                                    class="form-control"
+                                    required>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label>Transaction Type</label>
+
+                            <select
+                                    id="transactionType"
+                                    class="form-select"
+                                    required>
+
+                                <option value="">Select type</option>
+                                <option value="SALE">SALE</option>
+                                <option value="REFUND">REFUND</option>
+                                <option value="EXPENSE">EXPENSE</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <label>Amount</label>
+
+                            <input
+                                    id="amount"
+                                    type="number"
+                                    step="0.01"
+                                    class="form-control"
+                                    required>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <label>Tax Rate</label>
+
+                            <div class="input-group">
+
+                                <input
+                                        id="taxRate"
+                                        type="number"
+                                        step="0.01"
+                                        class="form-control"
+                                        required>
+
+                                <span class="input-group-text">%</span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <label>Reported Tax</label>
+
+                            <input
+                                    id="reportedTax"
+                                    type="number"
+                                    step="0.01"
+                                    class="form-control">
+
+                        </div>
+
+                        <div class="col-md-12">
+
+                            <label>
+                                Original Transaction ID
+                                <small>(Refund only)</small>
+                            </label>
+
+                            <input
+                                    id="originalTransactionId"
+                                    class="form-control"
+                                    placeholder="Required for refund validation">
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                        class="btn btn-light"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button
+                        class="btn primary-btn"
+                        onclick="createTransaction()">
+
+                    <i class="bi bi-check-lg"></i>
+                    Submit Transaction
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<script th:src="@{/js/app.js}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        initializeUser();
+        loadTransactions();
+    });
+</script>
+
+</body>
+</html>

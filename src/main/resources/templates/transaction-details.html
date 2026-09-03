@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>TaxGuard | Transaction Details</title>
+
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+
+<div class="app-wrapper">
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div>
+                <h4>Tax<span>Guard</span></h4>
+                <small>Compliance Platform</small>
+            </div>
+
+        </div>
+
+        <div class="sidebar-section">MAIN</div>
+
+        <nav>
+
+            <a href="/dashboard" class="nav-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                Dashboard
+            </a>
+
+            <a href="/transactions" class="nav-item active">
+                <i class="bi bi-arrow-left-right"></i>
+                Transactions
+            </a>
+
+            <a href="/exceptions" class="nav-item">
+                <i class="bi bi-exclamation-triangle"></i>
+                Exceptions
+            </a>
+
+            <div class="sidebar-section">ANALYTICS</div>
+
+            <a href="/reports" class="nav-item">
+                <i class="bi bi-bar-chart-line"></i>
+                Reports
+            </a>
+
+            <div class="sidebar-section">MANAGEMENT</div>
+
+            <a href="/rules" class="nav-item">
+                <i class="bi bi-sliders"></i>
+                Compliance Rules
+            </a>
+
+            <a href="/audit-logs" class="nav-item">
+                <i class="bi bi-clock-history"></i>
+                Audit Logs
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System Operational</strong>
+                    <small>All services running</small>
+                </div>
+            </div>
+
+            <button class="logout-sidebar" onclick="logout()">
+                <i class="bi bi-box-arrow-left"></i>
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <button class="mobile-menu" onclick="toggleSidebar()">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <div>
+                <h5>Transaction Details</h5>
+                <span class="topbar-subtitle">
+                    Detailed compliance analysis
+                </span>
+            </div>
+
+        </header>
+
+
+        <div class="page-content">
+
+            <div class="page-title-row">
+
+                <div>
+
+                    <a href="/transactions"
+                       class="back-link">
+
+                        <i class="bi bi-arrow-left"></i>
+                        Back to transactions
+
+                    </a>
+
+                    <h2 class="mt-3">
+                        Transaction
+                        <span id="detailTransactionId">---</span>
+                    </h2>
+
+                </div>
+
+                <span
+                        id="detailStatus"
+                        class="status-badge">
+                    ---
+                </span>
+
+            </div>
+
+
+            <div class="row g-4">
+
+                <div class="col-xl-8">
+
+                    <div class="dashboard-card">
+
+                        <div class="card-header-custom">
+
+                            <div>
+                                <h5>Transaction Information</h5>
+                                <p>Financial transaction details</p>
+                            </div>
+
+                            <i class="bi bi-receipt detail-header-icon"></i>
+
+                        </div>
+
+                        <div class="detail-grid">
+
+                            <div>
+                                <span>Transaction ID</span>
+                                <strong id="detailId">---</strong>
+                            </div>
+
+                            <div>
+                                <span>Customer ID</span>
+                                <strong id="detailCustomer">---</strong>
+                            </div>
+
+                            <div>
+                                <span>Transaction Date</span>
+                                <strong id="detailDate">---</strong>
+                            </div>
+
+                            <div>
+                                <span>Transaction Type</span>
+                                <strong id="detailType">---</strong>
+                            </div>
+
+                            <div>
+                                <span>Amount</span>
+                                <strong id="detailAmount">---</strong>
+                            </div>
+
+                            <div>
+                                <span>Tax Rate</span>
+                                <strong id="detailRate">---</strong>
+                            </div>
+
+                            <div>
+                                <span>Reported Tax</span>
+                                <strong id="detailReportedTax">---</strong>
+                            </div>
+
+                            <div>
+                                <span>Expected Tax</span>
+                                <strong id="detailExpectedTax">---</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-card mt-4">
+
+                        <div class="card-header-custom">
+
+                            <div>
+
+                                <h5>Tax Gap Analysis</h5>
+
+                                <p>
+                                    Difference between expected and reported tax
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="tax-gap-display">
+
+                            <div class="gap-box expected">
+
+                                <span>Expected Tax</span>
+
+                                <strong id="gapExpected">
+                                    ₹0
+                                </strong>
+
+                            </div>
+
+                            <div class="gap-symbol">
+                                −
+                            </div>
+
+                            <div class="gap-box reported">
+
+                                <span>Reported Tax</span>
+
+                                <strong id="gapReported">
+                                    ₹0
+                                </strong>
+
+                            </div>
+
+                            <div class="gap-symbol">
+                                =
+                            </div>
+
+                            <div class="gap-box actual">
+
+                                <span>Tax Gap</span>
+
+                                <strong id="gapAmount">
+                                    ₹0
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-xl-4">
+
+                    <div class="dashboard-card">
+
+                        <div class="card-header-custom">
+
+                            <div>
+                                <h5>Compliance Status</h5>
+                            </div>
+
+                        </div>
+
+                        <div class="compliance-result">
+
+                            <div
+                                    id="complianceIcon"
+                                    class="compliance-result-icon">
+
+                                <i class="bi bi-shield-check"></i>
+
+                            </div>
+
+                            <h3 id="complianceResult">
+                                ---
+                            </h3>
+
+                            <p id="complianceDescription">
+                                Analyzing transaction...
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-card mt-4">
+
+                        <div class="card-header-custom">
+
+                            <div>
+                                <h5>Validation</h5>
+                            </div>
+
+                        </div>
+
+                        <div class="validation-row">
+
+                            <span>
+                                Data Validation
+                            </span>
+
+                            <span
+                                    id="validationStatus"
+                                    class="status-badge">
+                                ---
+                            </span>
+
+                        </div>
+
+                        <div class="validation-reason"
+                             id="validationReason">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-card mt-4">
+
+                <div class="card-header-custom">
+
+                    <div>
+                        <h5>Compliance Exceptions</h5>
+                        <p>Rules triggered by this transaction</p>
+                    </div>
+
+                </div>
+
+                <div id="transactionExceptions">
+
+                    <div class="empty-state">
+                        <i class="bi bi-check-circle"></i>
+                        <h6>No exceptions found</h6>
+                        <p>This transaction passed all configured rules.</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-card mt-4">
+
+                <div class="card-header-custom">
+
+                    <div>
+                        <h5>Audit Trail</h5>
+                        <p>Transaction processing history</p>
+                    </div>
+
+                </div>
+
+                <div class="timeline">
+
+                    <div class="timeline-item">
+
+                        <div class="timeline-icon blue">
+                            <i class="bi bi-cloud-arrow-up"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>Transaction Ingested</strong>
+
+                            <p>
+                                Transaction entered the compliance system.
+                            </p>
+
+                            <small id="auditIngestion">
+                                ---
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <div class="timeline-item">
+
+                        <div class="timeline-icon purple">
+                            <i class="bi bi-calculator"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>Tax Computation</strong>
+
+                            <p>
+                                Expected tax and tax gap calculated.
+                            </p>
+
+                            <small>
+                                Tax calculation completed
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <div class="timeline-item">
+
+                        <div class="timeline-icon orange">
+                            <i class="bi bi-shield-exclamation"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>Rules Executed</strong>
+
+                            <p>
+                                Active compliance rules evaluated.
+                            </p>
+
+                            <small>
+                                Rule execution completed
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script th:src="@{/js/app.js}"></script>
+
+<script>
+    document.addEventListener(
+        "DOMContentLoaded",
+        loadTransactionDetails
+    );
+</script>
+
+</body>
+</html>

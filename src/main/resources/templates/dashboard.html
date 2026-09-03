@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>TaxGuard | Dashboard</title>
+
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+
+<div class="app-wrapper">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div>
+                <h4>Tax<span>Guard</span></h4>
+                <small>Compliance Platform</small>
+            </div>
+
+        </div>
+
+        <div class="sidebar-section">
+            MAIN
+        </div>
+
+        <nav>
+
+            <a href="/dashboard" class="nav-item active">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="/transactions" class="nav-item">
+                <i class="bi bi-arrow-left-right"></i>
+                <span>Transactions</span>
+            </a>
+
+            <a href="/exceptions" class="nav-item">
+                <i class="bi bi-exclamation-triangle"></i>
+                <span>Exceptions</span>
+            </a>
+
+            <div class="sidebar-section">
+                ANALYTICS
+            </div>
+
+            <a href="/reports" class="nav-item">
+                <i class="bi bi-bar-chart-line"></i>
+                <span>Reports</span>
+            </a>
+
+            <div class="sidebar-section">
+                MANAGEMENT
+            </div>
+
+            <a href="/rules" class="nav-item">
+                <i class="bi bi-sliders"></i>
+                <span>Compliance Rules</span>
+            </a>
+
+            <a href="/audit-logs" class="nav-item">
+                <i class="bi bi-clock-history"></i>
+                <span>Audit Logs</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System Operational</strong>
+                    <small>All services running</small>
+                </div>
+            </div>
+
+            <button
+                    class="logout-sidebar"
+                    onclick="logout()">
+
+                <i class="bi bi-box-arrow-left"></i>
+                Logout
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <button
+                    class="mobile-menu"
+                    onclick="toggleSidebar()">
+
+                <i class="bi bi-list"></i>
+
+            </button>
+
+            <div>
+
+                <h5>Compliance Dashboard</h5>
+
+                <span class="topbar-subtitle">
+                    Monitor your organization's tax health
+                </span>
+
+            </div>
+
+            <div class="topbar-right">
+
+                <div class="notification-icon">
+
+                    <i class="bi bi-bell"></i>
+
+                    <span>3</span>
+
+                </div>
+
+                <div class="user-profile">
+
+                    <div class="avatar">
+                        <span id="userInitial">A</span>
+                    </div>
+
+                    <div class="user-info">
+
+                        <strong id="currentUsername">
+                            Administrator
+                        </strong>
+
+                        <small id="currentRole">
+                            ADMIN
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- PAGE -->
+
+        <div class="page-content">
+
+            <div class="welcome-banner">
+
+                <div>
+
+                    <span class="banner-label">
+                        TAX COMPLIANCE OVERVIEW
+                    </span>
+
+                    <h2>
+                        Good Evening,
+                        <span id="welcomeUser">Administrator</span>
+                    </h2>
+
+                    <p>
+                        Here's what's happening with your tax
+                        compliance today.
+                    </p>
+
+                </div>
+
+                <div class="banner-icon">
+
+                    <i class="bi bi-graph-up-arrow"></i>
+
+                </div>
+
+            </div>
+
+
+            <!-- KPI CARDS -->
+
+            <div class="row g-4 mt-1">
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div class="stat-card stat-blue">
+
+                        <div class="stat-top">
+
+                            <div class="stat-icon">
+                                <i class="bi bi-receipt"></i>
+                            </div>
+
+                            <span class="stat-change positive">
+                                <i class="bi bi-arrow-up"></i>
+                                12.4%
+                            </span>
+
+                        </div>
+
+                        <div class="stat-value" id="totalTransactions">
+                            0
+                        </div>
+
+                        <div class="stat-label">
+                            Total Transactions
+                        </div>
+
+                        <div class="stat-footer">
+                            <span>vs last month</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div class="stat-card stat-purple">
+
+                        <div class="stat-top">
+
+                            <div class="stat-icon">
+                                <i class="bi bi-currency-rupee"></i>
+                            </div>
+
+                            <span class="stat-change positive">
+                                <i class="bi bi-arrow-up"></i>
+                                8.2%
+                            </span>
+
+                        </div>
+
+                        <div class="stat-value">
+                            ₹<span id="totalTaxGap">0</span>
+                        </div>
+
+                        <div class="stat-label">
+                            Detected Tax Gap
+                        </div>
+
+                        <div class="stat-footer">
+                            <span>Potential recovery</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div class="stat-card stat-green">
+
+                        <div class="stat-top">
+
+                            <div class="stat-icon">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+
+                            <span class="stat-change positive">
+                                <i class="bi bi-arrow-up"></i>
+                                4.8%
+                            </span>
+
+                        </div>
+
+                        <div class="stat-value">
+                            <span id="complianceScore">0</span>%
+                        </div>
+
+                        <div class="stat-label">
+                            Compliance Score
+                        </div>
+
+                        <div class="stat-footer">
+                            <span>Overall health</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div class="stat-card stat-orange">
+
+                        <div class="stat-top">
+
+                            <div class="stat-icon">
+                                <i class="bi bi-exclamation-octagon"></i>
+                            </div>
+
+                            <span class="stat-change negative">
+                                <i class="bi bi-arrow-down"></i>
+                                3.1%
+                            </span>
+
+                        </div>
+
+                        <div class="stat-value" id="totalExceptions">
+                            0
+                        </div>
+
+                        <div class="stat-label">
+                            Open Exceptions
+                        </div>
+
+                        <div class="stat-footer">
+                            <span>Requires attention</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CHARTS -->
+
+            <div class="row g-4 mt-2">
+
+                <div class="col-xl-8">
+
+                    <div class="dashboard-card">
+
+                        <div class="card-header-custom">
+
+                            <div>
+                                <h5>Tax Gap Analysis</h5>
+
+                                <p>
+                                    Expected vs reported tax
+                                </p>
+                            </div>
+
+                            <select
+                                    class="form-select chart-select">
+
+                                <option>Last 6 Months</option>
+                                <option>Last 12 Months</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="chart-container">
+
+                            <canvas id="taxGapChart"></canvas>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-xl-4">
+
+                    <div class="dashboard-card">
+
+                        <div class="card-header-custom">
+
+                            <div>
+
+                                <h5>Compliance Health</h5>
+
+                                <p>
+                                    Transaction distribution
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="donut-container">
+
+                            <canvas id="complianceChart"></canvas>
+
+                            <div class="donut-center">
+
+                                <strong id="donutScore">
+                                    0%
+                                </strong>
+
+                                <span>Compliant</span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="chart-legend">
+
+                            <div>
+                                <span class="legend-dot compliant"></span>
+                                Compliant
+                            </div>
+
+                            <div>
+                                <span class="legend-dot underpaid"></span>
+                                Underpaid
+                            </div>
+
+                            <div>
+                                <span class="legend-dot overpaid"></span>
+                                Overpaid
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RECENT DATA -->
+
+            <div class="row g-4 mt-2">
+
+                <div class="col-xl-7">
+
+                    <div class="dashboard-card">
+
+                        <div class="card-header-custom">
+
+                            <div>
+                                <h5>Recent Transactions</h5>
+                                <p>Latest financial activity</p>
+                            </div>
+
+                            <a
+                                    href="/transactions"
+                                    class="view-all">
+                                View all
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+
+                        </div>
+
+                        <div class="table-responsive">
+
+                            <table class="table custom-table">
+
+                                <thead>
+
+                                <tr>
+                                    <th>Transaction</th>
+                                    <th>Customer</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+
+                                </thead>
+
+                                <tbody id="recentTransactions">
+
+                                <tr>
+
+                                    <td colspan="4"
+                                        class="text-center py-4">
+
+                                        Loading...
+
+                                    </td>
+
+                                </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-xl-5">
+
+                    <div class="dashboard-card">
+
+                        <div class="card-header-custom">
+
+                            <div>
+                                <h5>Recent Exceptions</h5>
+                                <p>Issues requiring review</p>
+                            </div>
+
+                            <a
+                                    href="/exceptions"
+                                    class="view-all">
+                                View all
+                            </a>
+
+                        </div>
+
+                        <div id="recentExceptions">
+
+                            <div class="exception-item">
+
+                                <div class="exception-icon high">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                </div>
+
+                                <div class="exception-content">
+
+                                    <strong>
+                                        High Value Transaction
+                                    </strong>
+
+                                    <span>
+                                        Requires auditor review
+                                    </span>
+
+                                </div>
+
+                                <span class="severity-badge high">
+                                    HIGH
+                                </span>
+
+                            </div>
+
+                            <div class="exception-item">
+
+                                <div class="exception-icon medium">
+                                    <i class="bi bi-shield-exclamation"></i>
+                                </div>
+
+                                <div class="exception-content">
+
+                                    <strong>
+                                        GST Slab Violation
+                                    </strong>
+
+                                    <span>
+                                        Tax rate mismatch detected
+                                    </span>
+
+                                </div>
+
+                                <span class="severity-badge medium">
+                                    MEDIUM
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script th:src="@{/js/app.js}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", loadDashboard);
+</script>
+
+</body>
+</html>
